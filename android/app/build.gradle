@@ -9,42 +9,29 @@ android {
 		targetSdkVersion 36
 		versionName "${versionMajor}.${versionMinor}.${versionPatch}"
 		versionCode versionMajor * 1000000 + versionMinor * 10000 + versionPatch * 100 + versionBuild
+		ndk {
+			abiFilters 'armeabi-v7a', 'arm64-v8a', 'x86', 'x86_64'
+		}
 	}
 
 	buildFeatures {
 		buildConfig true
 	}
 
-	// load properties
-	Properties props = new Properties()
-	def propfile = file('../local.properties')
-	if (propfile.exists())
-		props.load(new FileInputStream(propfile))
-
-	if (props.getProperty('keystore') != null) {
-		signingConfigs {
-			release {
-				storeFile file(props['keystore'])
-				storePassword props['keystore.password']
-				keyAlias props['key']
-				keyPassword props['key.password']
-			}
-		}
-
-		buildTypes {
-			release {
-				minifyEnabled true
-				signingConfig signingConfigs.release
-			}
+	// signing: always sign the release build so the APK can be installed
+	signingConfigs {
+		release {
+			storeFile file('../release-keystore.jks')
+			storePassword 'luanti123'
+			keyAlias 'luanti'
+			keyPassword 'luanti123'
 		}
 	}
 
-	// for multiple APKs
-	splits {
-		abi {
-			enable true
-			reset()
-			include 'armeabi-v7a', 'arm64-v8a', 'x86', 'x86_64'
+	buildTypes {
+		release {
+			minifyEnabled true
+			signingConfig signingConfigs.release
 		}
 	}
 
