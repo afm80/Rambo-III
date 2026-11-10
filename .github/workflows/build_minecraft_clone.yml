@@ -15,8 +15,13 @@ jobs:
           java-version: '17'
           distribution: 'zulu'
 
-      - name: Setup Android SDK
+      - name: Setup Android SDK & Accept Licenses
         uses: android-actions/setup-android@v3
+
+      - name: Auto Accept Android Licenses
+        run: |
+          yes | ${ANDROID_HOME}/cmdline-tools/latest/bin/sdkmanager --licenses || true
+          yes | ${ANDROID_HOME}/tools/bin/sdkmanager --licenses || true
 
       - name: Fix Scripts Permissions
         run: |
