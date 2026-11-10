@@ -15,13 +15,12 @@ jobs:
           java-version: '17'
           distribution: 'zulu'
 
-      - name: Setup Android SDK & Accept Licenses
-        uses: android-actions/setup-android@v3
-
-      - name: Auto Accept Android Licenses
+      - name: Auto Accept Android Licenses Direct
         run: |
-          yes | ${ANDROID_HOME}/cmdline-tools/latest/bin/sdkmanager --licenses || true
-          yes | ${ANDROID_HOME}/tools/bin/sdkmanager --licenses || true
+          mkdir -p -m 0730 "$ANDROID_HOME/licenses"
+          echo -e "\n24436f477b46b29b1d54115b9e7de6e0b4d538a1" > "$ANDROID_HOME/licenses/android-sdk-license"
+          echo -e "\n84831b9409646a918e30573bab4c9c91346d8abd" > "$ANDROID_HOME/licenses/android-sdk-preview-license"
+          echo -e "\n271017440bc41b75312cedc221a48b2d7b1b1fcb" > "$ANDROID_HOME/licenses/android-googletv-license"
 
       - name: Fix Scripts Permissions
         run: |
