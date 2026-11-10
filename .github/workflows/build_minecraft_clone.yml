@@ -18,10 +18,14 @@ jobs:
       - name: Setup Android SDK
         uses: android-actions/setup-android@v3
 
+      - name: Fix Scripts Permissions
+        run: |
+          chmod +x ./util/ci/*.sh || true
+          chmod +x ./android/gradlew || true
+
       - name: Build Android App
         run: |
           cd android
-          chmod +x gradlew
           ./gradlew assembleRelease --no-daemon
 
       - name: Upload APK
